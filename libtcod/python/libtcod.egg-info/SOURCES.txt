@@ -1,0 +1,10 @@
+MANIFEST.in
+samples_py.py
+setup.cfg
+setup.py
+libtcod.egg-info/PKG-INFO
+libtcod.egg-info/SOURCES.txt
+libtcod.egg-info/dependency_links.txt
+libtcod.egg-info/top_level.txt
+libtcodpy/__init__.py
+libtcodpy/cprotos.py
