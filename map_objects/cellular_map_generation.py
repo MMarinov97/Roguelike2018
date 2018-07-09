@@ -43,7 +43,7 @@ class GameMap:
         for j in range(0, self.height):
             matrix[int(self.width/2)][j] = False
 
-        for generation in range(0, 3):
+        for generation in range(0, 2):
             for i in range(1, self.width -1):
                 for j in range(1, self.height -1):
                     aliveNum = self.count_alive_neighbours(i, j, matrix)
