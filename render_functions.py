@@ -22,17 +22,17 @@ def render_all(con, entities, game_map, fov_map, fov_recompute, screen_width, sc
                         if wall:
                             libtcod.console_set_default_foreground(con, libtcod.black)
                             libtcod.console_set_char_background(con, x, y, colors.get('dark_wall'), libtcod.BKGND_SET)
-                            libtcod.console_put_char(con, x, y, '#', libtcod.BKGND_NONE)
+                            libtcod.console_put_char(con, x, y, 178, libtcod.BKGND_NONE)
                         else:
                             libtcod.console_set_default_foreground(con, libtcod.black)
                             libtcod.console_set_char_background(con, x, y, colors.get('dark_ground'), libtcod.BKGND_SET)
-                            libtcod.console_put_char(con, x, y, '.', libtcod.BKGND_NONE)
+                            libtcod.console_put_char(con, x, y, 176, libtcod.BKGND_NONE)
                     else:
                         libtcod.console_set_char_background(con, x, y, colors.get('unexplored'), libtcod.BKGND_SET)
 
     # Draws all entities on top of the tiles
     for entity in entities:
-        draw_entity(con, entity, fov_map)
+        draw_entity(con, entity, fov_map, colors)
     
     libtcod.console_blit(con, 0, 0, screen_width, screen_height, 0, 0, 0)
 def clear_all(con, entities):
@@ -40,10 +40,14 @@ def clear_all(con, entities):
     for entity in entities:
         clear_entity(con, entity)
 
-def draw_entity(con, entity, fov_map):
+def draw_entity(con, entity, fov_map, colors):
     if libtcod.map_is_in_fov(fov_map, entity.x, entity.y):
         libtcod.console_set_default_foreground(con, entity.color)
         libtcod.console_put_char(con, entity.x, entity.y, entity.char, libtcod.BKGND_NONE)
+    else:
+        libtcod.console_set_default_foreground(con, colors.get('dark_wall'))
+        libtcod.console_put_char(con, entity.x, entity.y, entity.char, libtcod.BKGND_NONE)
+
 
 def clear_entity(con, entity):
     #  Clears the char that represents this entity

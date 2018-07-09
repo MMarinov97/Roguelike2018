@@ -3,6 +3,7 @@ from input_handler import handle_keys
 from random import randint
 from entity import Entity
 from map_objects.cellular_map_generation import GameMap
+from map_objects.game_map import GameMap as roomGameMap
 from fov_functions import initialize_fov, recompute_fov
 from render_functions import clear_all, render_all
 
@@ -18,7 +19,7 @@ def main():
     room_min_size = 6
     max_rooms = 30
 
-    fov_algorithm = 2
+    fov_algorithm = 0
     fov_light_walls = True
     fov_radius = 5
 
@@ -26,7 +27,7 @@ def main():
     colors =  {
         'dark_wall': libtcod.Color(48, 98, 48),
         'dark_ground': libtcod.Color(100, 140, 15),
-        'light_wall': libtcod.Color(130, 110, 50),
+        'light_wall': libtcod.Color(110, 110, 48),
         'light_ground': libtcod.Color(155, 188, 15),
         'unexplored': libtcod.Color(15, 56, 15)
     }
@@ -43,10 +44,15 @@ def main():
     libtcod.console_init_root(screen_width, screen_height, 'Roguelike',  False) # False because we dont want fullscreen
     # Main console
     con = libtcod.console_new(screen_width, screen_height)
-    # Game map
-    game_map = GameMap(map_width, map_height)
-    roomNum = randint(5, max_rooms)
-    game_map.make_map(65, map_width, map_height, player)
+    # We create a map randomly from the available options
+    map_type = randint(0, 1)
+    if map_type == 0:
+        game_map = GameMap(map_width, map_height)
+        game_map.make_map(65, map_width, map_height, player)
+    else:
+        room_num = randint(5, max_rooms)
+        game_map = roomGameMap(map_width, map_height)
+        game_map.make_map(room_num, room_min_size, room_max_size, map_width, map_height, player)
     # Fov doesn't need to be computed every turn, only if we move. We use
     # the boolean fov_recompute to handle this
     fov_recompute = True
