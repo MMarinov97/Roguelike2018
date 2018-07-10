@@ -21,7 +21,7 @@ def main():
 
     fov_algorithm = 0
     fov_light_walls = True
-    fov_radius = 5
+    fov_radius = 6
 
     # Dictionary to hold colors we'll be using
     colors =  {
@@ -48,11 +48,11 @@ def main():
     map_type = randint(0, 1)
     if map_type == 0:
         game_map = GameMap(map_width, map_height)
-        game_map.make_map(65, map_width, map_height, player)
+        game_map.make_map(55, map_width, map_height, player)
     else:
-        room_num = randint(5, max_rooms)
+        room_num = randint(10, max_rooms)
         game_map = roomGameMap(map_width, map_height)
-        game_map.make_map(room_num, room_min_size, room_max_size, map_width, map_height, player)
+        game_map.make_map(room_num, room_min_size, room_max_size, map_width, map_height, player, entities, 3)
     # Fov doesn't need to be computed every turn, only if we move. We use
     # the boolean fov_recompute to handle this
     fov_recompute = True
@@ -76,7 +76,6 @@ def main():
         fov_recompute = False
         libtcod.console_flush()
 
-        clear_all(con, entities)
         # We overwrite the character before getting the new coordinates, so next time we draw
         # it will not leave a trace
         '''

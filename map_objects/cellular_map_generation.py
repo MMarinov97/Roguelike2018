@@ -1,7 +1,7 @@
 from random import randint
 from map_objects.rectangle import Rect
 from map_objects.tile import Tile
-
+from map_objects.rectangle import Rect
 
 class GameMap:
     def __init__(self, width, height):
@@ -13,6 +13,19 @@ class GameMap:
         tiles = [[Tile(False) for y in range(self.height)] for x in range(self.width)]
 
         return tiles
+
+    def create_room(self, room):
+        # go through the tiles in the rectangle and make them passable
+        for x in range(room.x1 + 1, room.x2):
+            for y in range(room.y1 + 1, room.y2):
+                self.tiles[x][y].blocked = False
+                self.tiles[x][y].block_sight = False
+    def create_blob(self, room):
+        # go through the tiles in the rectangle and make them passable
+        for x in range(room.x1 + 1, room.x2):
+            for y in range(room.y1 + 1, room.y2):
+                self.tiles[x][y].blocked = True
+                self.tiles[x][y].block_sight = True
 
     def map_to_matrix(self):
         # Returns a 2D matrix, which is the dead/alive interpretation of the
@@ -38,18 +51,14 @@ class GameMap:
                     matrix[x][y] = True
 
         # Now we iterate through the same rules to shape the cave
-        for i in range(0, self.width-1):
-            matrix[i][int(self.height/2)] = False
-        for j in range(0, self.height):
-            matrix[int(self.width/2)][j] = False
 
-        for generation in range(0, 2):
+        for generation in range(0, 3):
             for i in range(1, self.width -1):
                 for j in range(1, self.height -1):
                     aliveNum = self.count_alive_neighbours(i, j, matrix)
                     if matrix[i][j]:
                         # Cell is True -> Wall
-                        if aliveNum > deathLimit:
+                        if aliveNum < deathLimit:
                             self.tiles[i][j].blocked = False
                             self.tiles[i][j].block_sight = False
                         else:
@@ -63,8 +72,23 @@ class GameMap:
                         else:
                             self.tiles[i][j].blocked = False
                             self.tiles[i][j].block_sight = False
+                room = Rect(randint(10, self.width-10), randint(10, self.height - 10), 6, 4)
+                self.create_room(room)
+
+                blob = Rect(randint(10, self.width-10), randint(10, self.height - 10), 6, 6)
+                self.create_blob(blob)
             # Now we copy the map on the matrix for the next gen
             matrix = self.map_to_matrix()
+        for y in range(0, self.height):
+            if y == 0 or y == self.height-1:
+                for x in range(0, self.width):
+                    self.tiles[x][y].block_sight = True
+                    self.tiles[x][y].blocked = True
+            self.tiles[0][y].blocked = True
+            self.tiles[0][y].block_sight = True
+
+            self.tiles[self.width-1][y].blocked = True
+            self.tiles[self.width-1][y].block_sight = True
 
     def count_alive_neighbours(self, x, y, matrix):
         # We check all neighbours to see if they are alive
