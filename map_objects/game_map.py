@@ -36,7 +36,7 @@ class GameMap:
             for other_room in rooms:
                 if new_room.intersect(other_room):
                     chance = randint(0,100)
-                    if chance < 45:
+                    if chance < 25:
                         break
             else:
                 # this means there are no intersections, so this room is valid
