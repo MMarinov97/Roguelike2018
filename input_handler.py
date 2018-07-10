@@ -2,14 +2,31 @@ import libtcodpy as libtcod
 # Key handler
 def handle_keys(key):
     # Movement
-    if(key.vk) == libtcod.KEY_DOWN:
+    keyChar = chr(key.c)
+    if keyChar == 'j':
+        # DOWN
         return {'move': (0, 1)} 
-    if(key.vk) == libtcod.KEY_UP:
+    if keyChar == 'k':
+        # UP
         return {'move': (0, -1)}
-    if(key.vk) == libtcod.KEY_RIGHT:
+    if keyChar == 'l':
+        # RIGHT
         return {'move': (1 , 0)}
-    if(key.vk) == libtcod.KEY_LEFT:
+    if keyChar == 'h':
+        # LEFT
         return {'move': (-1, 0)}
+    if keyChar == 'u':
+        # UP + LEFT
+        return {'move': (-1, -1)}
+    if keyChar == 'i':
+        # UP + RIGHT
+        return {'move': (1 , -1)}
+    if keyChar == 'n':
+        # DOWN + LEFT
+        return {'move': (-1, 1)}
+    if keyChar == 'm':
+        # DOWN + RIGHT
+        return {'move': (1, 1)}
     # Other actions
     if(key.vk) == libtcod.KEY_ENTER and libtcod.KEY_ALT:
         return {'fullscreen': True}
