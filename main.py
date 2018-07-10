@@ -18,6 +18,7 @@ def main():
     room_max_size = 10
     room_min_size = 6
     max_rooms = 30
+    max_monsters = 20
 
     fov_algorithm = 0
     fov_light_walls = True
@@ -48,7 +49,7 @@ def main():
     map_type = randint(0, 1)
     if map_type == 0:
         game_map = GameMap(map_width, map_height)
-        game_map.make_map(55, map_width, map_height, player)
+        game_map.make_map(80, map_width, map_height, player, max_monsters, entities)
     else:
         room_num = randint(10, max_rooms)
         game_map = roomGameMap(map_width, map_height)

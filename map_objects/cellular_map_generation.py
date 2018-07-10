@@ -2,6 +2,8 @@ from random import randint
 from map_objects.rectangle import Rect
 from map_objects.tile import Tile
 from map_objects.rectangle import Rect
+from entity import Entity
+import libtcodpy as libtcod
 
 class GameMap:
     def __init__(self, width, height):
@@ -35,12 +37,26 @@ class GameMap:
             for j in range(0, self.height):
                 matrix[i][j] = self.tiles[i][j].blocked 
         return matrix 
+    def place_entities(self, entities, matrix, max_monsters):
+        allPlaced = False
+        placed = 0
+        while not allPlaced:
+            x = randint(1, self.width - 1)
+            y = randint(1, self.height - 1)
+
+            if not matrix[x][y]:
+                monster = Entity(x, y, 'R', libtcod.grey)
+                entities.append(monster)
+                placed += 1
+
+                if placed == max_monsters:
+                    allPlaced = True
 
     def is_blocked(self, x, y):
         if self.tiles[x][y].blocked:
             return True
         return False
-    def make_map(self, chance, map_width, map_height, player):
+    def make_map(self, chance, map_width, map_height, player, max_monsters, entities):
         # Initial setup of the matrix
         birthLimit = 4
         deathLimit = 3 
@@ -89,6 +105,7 @@ class GameMap:
 
             self.tiles[self.width-1][y].blocked = True
             self.tiles[self.width-1][y].block_sight = True
+        self.place_entities(entities, matrix, max_monsters)
 
     def count_alive_neighbours(self, x, y, matrix):
         # We check all neighbours to see if they are alive
